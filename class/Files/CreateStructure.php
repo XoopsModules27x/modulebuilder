@@ -1,0 +1,276 @@
+<?php declare(strict_types=1);
+
+namespace XoopsModules\Modulebuilder\Files;
+
+use XoopsModules\Modulebuilder;
+
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
+/**
+ * modulebuilder module.
+ *
+ * @copyright       XOOPS Project (https://xoops.org)
+ * @license         GNU GPL 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+ *
+ * @since           2.5.0
+ *
+ * @author          Txmod Xoops https://xoops.org
+ *                  Goffy https://myxoops.org
+ */
+
+/**
+ * Class ModuleBuilderStructure.
+ */
+class CreateStructure
+{
+    /**
+     * @var string
+     */
+    private $moduleName;
+    /**
+     * @var string
+     */
+    private $folderName;
+    /**
+     * @var string
+     */
+    private $fileName;
+    /**
+     * @var mixed
+     */
+    private $uploadPath;
+
+    /**
+     * @public function constructor class
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @static function getInstance
+     *
+     * @return Modulebuilder\Files\CreateStructure
+     */
+    public static function getInstance()
+    {
+        static $instance = false;
+        if (!$instance) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @protected function setUploadPath
+     *
+     * @param $path
+     */
+    protected function setUploadPath($path): void
+    {
+        $this->uploadPath = $path;
+    }
+
+    /**
+     * @protected function getUploadPath
+     *
+     * @return string
+     */
+    protected function getUploadPath()
+    {
+        return $this->uploadPath;
+    }
+
+    /**
+     * @protected function setModuleName
+     * @param $moduleName
+     */
+    protected function setModuleName($moduleName): void
+    {
+        $this->moduleName = $moduleName;
+    }
+
+    /**
+     * @protected function getModuleName
+     *
+     * @return string
+     */
+    protected function getModuleName()
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * @private function setFolderName
+     *
+     * @param $folderName
+     */
+    private function setFolderName($folderName): void
+    {
+        $this->folderName = $folderName;
+    }
+
+    /**
+     * @private function getFolderName
+     * @return string
+     */
+    private function getFolderName()
+    {
+        return $this->folderName;
+    }
+
+    /**
+     * @private function setFileName
+     *
+     * @param $fileName
+     */
+    private function setFileName($fileName): void
+    {
+        $this->fileName = $fileName;
+    }
+
+    /**
+     * @private function getFileName
+     *
+     * @return string
+     */
+    private function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @public function isDir
+     *
+     * @param $dname
+     */
+    public function isDir($dname): void
+    {
+        if (!\is_dir($dname)) {
+            if (!\mkdir($dname, 0755) && !\is_dir($dname)) {
+                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $dname));
+            }
+        }
+        chmod($dname, 0755);
+    }
+
+    /**
+     * @protected function makeDir
+     *
+     * @param string $dir
+     */
+    protected function makeDir(string $dir): void
+    {
+        $this->isDir(\trim($dir));
+    }
+
+    /**
+     * function isDirEmpty
+     *
+     * @param string $dir
+     *
+     * @return bool
+     */
+    public function isDirEmpty(string $dir): bool
+    {
+        $handle = \opendir($dir);
+        if (false === $handle) {
+            throw new \RuntimeException(\sprintf('Directory "%s" cannot be opened', $dir));
+        }
+        while (false !== ($entry = \readdir($handle))) {
+            if ('.' !== $entry && '..' !== $entry) {
+                \closedir($handle);
+                return false;
+            }
+        }
+        \closedir($handle);
+
+        return true;
+    }
+
+    /**
+     * @private function addFolderPath
+     *
+     * @param string $folderName
+     * @param bool|string $fileName
+     * @return string
+     */
+    private function addFolderPath(string $folderName, $fileName = false): string
+    {
+        $this->setFolderName($folderName);
+        if ($fileName) {
+            $this->setFileName($fileName);
+            $ret = $this->getUploadPath() . DS . $this->getModuleName() . DS . $this->getFolderName() . DS . $this->getFileName();
+        } else {
+            $ret = $this->getUploadPath() . DS . $this->getModuleName() . DS . $this->getFolderName();
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @public function makeDirInModule
+     *
+     * @param string $dirName
+     */
+    public function makeDirInModule(string $dirName): void
+    {
+        $fname = $this->addFolderPath($dirName);
+        $this->makeDir($fname);
+    }
+
+    /**
+     * @public function makeDir & copy file
+     *
+     * @param string $folderName
+     * @param string $fromFile
+     * @param string $toFile
+     */
+    public function makeDirAndCopyFile(string $folderName, string $fromFile, string $toFile): void
+    {
+        $dname = $this->addFolderPath($folderName);
+        $this->makeDir($dname);
+        $this->copyFile($folderName, $fromFile, $toFile);
+    }
+
+    /**
+     * @public function copy file
+     *
+     * @param string $folderName
+     * @param string $fromFile
+     * @param string $toFile
+     */
+    public function copyFile(string $folderName, string $fromFile, string $toFile): void
+    {
+        $dname = $this->addFolderPath($folderName);
+        $fname = $this->addFolderPath($folderName, $toFile);
+        $this->setCopy($dname, $fromFile, $fname);
+    }
+
+    /**
+     * @public function setCopy
+     *
+     * @param string $dname
+     * @param string $fromFile
+     * @param string $fname
+     */
+    public function setCopy(string $dname, string $fromFile, string $fname): void
+    {
+        if (\is_dir($dname)) {
+            chmod($dname, 0777);
+        } else {
+            $this->makeDir($dname);
+        }
+        if (!\copy($fromFile, $fname)) {
+            throw new \RuntimeException(\sprintf('Failed to copy "%s" to "%s"', $fromFile, $fname));
+        }
+    }
+}
