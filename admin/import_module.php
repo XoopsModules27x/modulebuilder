@@ -42,7 +42,7 @@ foreach ($installed_mods as $module) {
 $select_table = new \XoopsFormSelect(_AM_MODULEBUILDER_TABLE_ID, 'table_id', '');
 
 $sql    = 'SHOW TABLES';
-$result = $GLOBALS['xoopsDB']->queryF($sql);
+$result = $GLOBALS['xoopsDB']->query($sql);
 
 if (!$result instanceof \mysqli_result) {
     //    echo '_AM_MODULEBUILDER_ERROR_DATABASE';

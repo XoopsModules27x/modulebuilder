@@ -136,7 +136,7 @@ switch ($op) {
         if (1 == $setType) {
             // reset all
             $strSQL = 'UPDATE ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . ' SET ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . '.set_type = 0';
-            $GLOBALS['xoopsDB']->queryF($strSQL);
+            $GLOBALS['xoopsDB']->exec($strSQL);
         }
         $settingsObj->setVar('set_type', $setType);
 
@@ -184,9 +184,9 @@ switch ($op) {
             $setType         = $settingsObj->getVar('set_type');
             // reset all
             $strSQL = 'UPDATE ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . ' SET ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . '.set_type = 0';
-            $GLOBALS['xoopsDB']->queryF($strSQL);
+            $GLOBALS['xoopsDB']->exec($strSQL);
             $strSQL = 'UPDATE ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . ' SET ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . '.set_type = 1 WHERE ' . $GLOBALS['xoopsDB']->prefix('modulebuilder_settings') . '.set_id = ' . $setId;
-            if ($GLOBALS['xoopsDB']->queryF($strSQL)) {
+            if ($GLOBALS['xoopsDB']->exec($strSQL)) {
                 \redirect_header('settings.php', 5, \sprintf(\_AM_MODULEBUILDER_MODULE_FORM_UPDATED_OK, \Xmf\Request::getString('set_name', '', 'POST')));
             }
             $GLOBALS['xoopsTpl']->assign('error', $settingsObj->getHtmlErrors());
