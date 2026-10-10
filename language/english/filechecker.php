@@ -9,16 +9,13 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-$moduleDirName      = \basename(\dirname(__DIR__, 2));
-$moduleDirNameUpper = \mb_strtoupper($moduleDirName);
-
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_AVAILABLE', "<span style='color: green;'>Available</span>");
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_NOTAVAILABLE', "<span style='color: red;'>Not available</span>");
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_NOTWRITABLE', "<span style='color: red;'>Should have permission ( %d ), but it has ( %d )</span>");
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_COPYTHEFILE', 'Copy it');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_CREATETHEFILE', 'Create it');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_SETMPERM', 'Set the permission');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_FILECOPIED', 'The file has been copied');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_FILENOTCOPIED', 'The file cannot be copied');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_PERMSET', 'The permission has been set');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FC_PERMNOTSET', 'The permission cannot be set');
+\define('_CO_MODULEBUILDER_FC_AVAILABLE', "<span style='color: green;'>Available</span>");
+\define('_CO_MODULEBUILDER_FC_NOTAVAILABLE', "<span style='color: red;'>Not available</span>");
+\define('_CO_MODULEBUILDER_FC_NOTWRITABLE', "<span style='color: red;'>Should have permission ( %d ), but it has ( %d )</span>");
+\define('_CO_MODULEBUILDER_FC_COPYTHEFILE', 'Copy it');
+\define('_CO_MODULEBUILDER_FC_CREATETHEFILE', 'Create it');
+\define('_CO_MODULEBUILDER_FC_SETMPERM', 'Set the permission');
+\define('_CO_MODULEBUILDER_FC_FILECOPIED', 'The file has been copied');
+\define('_CO_MODULEBUILDER_FC_FILENOTCOPIED', 'The file cannot be copied');
+\define('_CO_MODULEBUILDER_FC_PERMSET', 'The permission has been set');
+\define('_CO_MODULEBUILDER_FC_PERMNOTSET', 'The permission cannot be set');

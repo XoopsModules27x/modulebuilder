@@ -49,7 +49,7 @@ function xoops_module_uninstall_modulebuilder(\XoopsModule $module)
         $suffix = \date('Y-m-d_His');
         $target = $uploadDirectory . "_bak_$suffix";
         if (!\rename($uploadDirectory, $target)) {
-            $module->setErrors(sprintf(constant('CO_' . $moduleDirNameUpper . '_ERROR_BAD_DEL_PATH'), $uploadDirectory));
+            $module->setErrors(sprintf(constant('_CO_MODULEBUILDER_ERROR_BAD_DEL_PATH'), $uploadDirectory));
             $success = false;
         }
     }

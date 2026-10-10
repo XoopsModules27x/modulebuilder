@@ -91,14 +91,14 @@ $adminmenu[] = [
 
 //Feedback
 $adminmenu[] = [
-    'title' => \constant('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_FEEDBACK'),
+    'title' => \constant('_CO_MODULEBUILDER_ADMENU_FEEDBACK'),
     'link'  => 'admin/feedback.php',
     'icon'  => $pathIcon32 . 'mail_foward.png',
 ];
 
 if (\is_object($helper->getModule()) && $helper->getConfig('displayDeveloperTools')) {
     $adminmenu[] = [
-        'title' => \constant('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_MIGRATE'),
+        'title' => \constant('_CO_MODULEBUILDER_ADMENU_MIGRATE'),
         'link'  => 'admin/migrate.php',
         'icon'  => $pathIcon32 . 'database_go.png',
     ];

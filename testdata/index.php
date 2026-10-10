@@ -48,7 +48,7 @@ switch ($op) {
             loadSampleData();
         } else {
             xoops_cp_header();
-            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \constant('CO_' . $moduleDirNameUpper . '_' . 'LOAD_SAMPLEDATA_CONFIRM'), \constant('CO_' . $moduleDirNameUpper . '_' . 'CONFIRM'));
+            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \constant('_CO_MODULEBUILDER_LOAD_SAMPLEDATA_CONFIRM'), \constant('_CO_MODULEBUILDER_CONFIRM'));
             xoops_cp_footer();
         }
         break;
@@ -63,7 +63,7 @@ switch ($op) {
             clearSampleData();
         } else {
             xoops_cp_header();
-            xoops_confirm(['ok' => 1, 'op' => 'clear'], 'index.php', constant('CO_' . $moduleDirNameUpper . '_' . 'CLEAR_SAMPLEDATA'), constant('CO_' . $moduleDirNameUpper . '_' . 'CONFIRM'));
+            xoops_confirm(['ok' => 1, 'op' => 'clear'], 'index.php', constant('_CO_MODULEBUILDER_CLEAR_SAMPLEDATA'), constant('_CO_MODULEBUILDER_CONFIRM'));
             xoops_cp_footer();
         }
         break;
@@ -109,7 +109,7 @@ function loadSampleData(): void
             $utility::rcopy($src, $dest);
         }
     }
-    \redirect_header('../admin/index.php', 1, \constant('CO_' . $moduleDirNameUpper . '_' . 'LOAD_SAMPLEDATA_SUCCESS'));
+    \redirect_header('../admin/index.php', 1, \constant('_CO_MODULEBUILDER_LOAD_SAMPLEDATA_SUCCESS'));
 }
 
 function saveSampleData(): void
@@ -139,7 +139,7 @@ function saveSampleData(): void
     TableLoad::saveTableToYamlFile('group_permission', $exportFolder . 'group_permission.yml', $criteria, $skipColumns);
     unset($criteria);
 
-    \redirect_header('../admin/index.php', 1, \constant('CO_' . $moduleDirNameUpper . '_' . 'SAVE_SAMPLEDATA_SUCCESS'));
+    \redirect_header('../admin/index.php', 1, \constant('_CO_MODULEBUILDER_SAVE_SAMPLEDATA_SUCCESS'));
 }
 
 function exportSchema(): void
@@ -152,9 +152,9 @@ function exportSchema(): void
         //        $migrate = new Migrate($moduleDirName);
         //        $migrate->saveCurrentSchema();
         //
-        //        redirect_header('../admin/index.php', 1, constant('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA_SUCCESS'));
+        //        redirect_header('../admin/index.php', 1, constant('_CO_MODULEBUILDER_EXPORT_SCHEMA_SUCCESS'));
     } catch (\Throwable $e) {
-        exit(constant('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA_ERROR'));
+        exit(constant('_CO_MODULEBUILDER_EXPORT_SCHEMA_ERROR'));
     }
 }
 
@@ -227,5 +227,5 @@ function clearSampleData(): void
     foreach ($tables as $table) {
         \Xmf\Database\TableLoad::truncateTable($table);
     }
-    redirect_header($helper->url('admin/index.php'), 1, constant('CO_' . $moduleDirNameUpper . '_' . 'CLEAR_SAMPLEDATA_OK'));
+    redirect_header($helper->url('admin/index.php'), 1, constant('_CO_MODULEBUILDER_CLEAR_SAMPLEDATA_OK'));
 }
