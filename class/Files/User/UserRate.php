@@ -258,7 +258,7 @@ class UserRate extends Files\CreateFile
                 $sql .= $this->getSimpleString("WHERE t." . $fieldId . " = ' . \$itemid;", $t . "\t\t\t");
                 $contIfInt = $sql;
 
-                $insertInt = "\$GLOBALS['xoopsDB']->queryF(\$sql)";
+                $insertInt = "\$GLOBALS['xoopsDB']->exec(\$sql)";
 
                 $insertOK  = $this->xc->getXcRedirectHeader('$redir', '', '2', "{$language}RATING_VOTE_THANKS", false, $t . "\t\t\t");
                 $insertErr = $this->xc->getXcRedirectHeader($tableName, '', '3', "{$language}RATING_ERROR1", true, $t . "\t\t\t");

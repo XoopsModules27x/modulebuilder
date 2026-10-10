@@ -66,7 +66,7 @@ class TableChecker extends \XoopsObject
             //echo '<br>' . $tabledef['name'];
             //check whether table exist or not
             $table   = $tabledef['name'];
-            $check   = $GLOBALS['xoopsDB']->queryF("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='$table'");
+            $check   = $GLOBALS['xoopsDB']->query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='$table'");
             $numRows = $GLOBALS['xoopsDB']->getRowsNum($check);
             if ($numRows) {
                 //table exist
@@ -76,7 +76,7 @@ class TableChecker extends \XoopsObject
                 if ($this::CHECKTYPE_UPDATE == $this->checktype || $this::CHECKTYPE_UPDATE_REPORT == $this->checktype) {
                     // create new table
                     $sql = $tabledef['sql'];
-                    if ($GLOBALS['xoopsDB']->queryF($sql)) {
+                    if ($GLOBALS['xoopsDB']->exec($sql)) {
                         $this->result[] = 'Table created:' . $table;
                     } else {
                         \xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
@@ -206,7 +206,7 @@ class TableChecker extends \XoopsObject
         foreach ($fields as $field) {
             //check whether column exist or not
             $fieldname = $field['name'];
-            $check     = $GLOBALS['xoopsDB']->queryF("SHOW COLUMNS FROM `$table` LIKE '$fieldname'");
+            $check     = $GLOBALS['xoopsDB']->query("SHOW COLUMNS FROM `$table` LIKE '$fieldname'");
             $numRows   = $GLOBALS['xoopsDB']->getRowsNum($check);
             if ($numRows) {
                 //field exist
@@ -218,7 +218,7 @@ class TableChecker extends \XoopsObject
                     if ('' !== (string)$field['after']) {
                         $sql .=  ' AFTER `' . $field['after'] . '`;';
                     }
-                    if ($GLOBALS['xoopsDB']->queryF($sql)) {
+                    if ($GLOBALS['xoopsDB']->exec($sql)) {
                         $this->result[] = 'Field added:' . $fieldname;
                     } else {
                         \xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);

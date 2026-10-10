@@ -180,7 +180,7 @@ function loadTableFromArrayWithReplace(string $table, array $data, string $searc
 
     $sql = 'DELETE FROM ' . $prefixedTable . ' WHERE `' . $search . '`=' . $db->quote($replace);
 
-    $result = $db->queryF($sql);
+    $result = $db->exec($sql);
 
     if ($result) {
         foreach ($data as $row) {
@@ -205,7 +205,7 @@ function loadTableFromArrayWithReplace(string $table, array $data, string $searc
 
             $sql = $insertInto . ') ' . $valueClause . ')';
 
-            $result = $db->queryF($sql);
+            $result = $db->exec($sql);
             if (false !== $result) {
                 ++$count;
             }
