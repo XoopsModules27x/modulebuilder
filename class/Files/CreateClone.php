@@ -1,0 +1,102 @@
+<?php declare(strict_types=1);
+
+namespace XoopsModules\Modulebuilder\Files;
+
+/**
+ * Class CreateClone
+ */
+class CreateClone
+{
+    /**
+     * Delete a file or recursively delete a directory
+     *
+     * @param string $path Path to file or directory
+     *
+     * public static function deleteFileFolder($path) {
+     *
+     * if (is_file($path)) {
+     * return @\unlink($path);
+     * }
+     * elseif (\is_dir($path)) {
+     * $scan = glob(r\trim($path,'/').'/*');
+     * foreach($scan as $index=>$path) {
+     * self::deleteFileFolder($path);
+     * }
+     * return @\rmdir($path);
+     * }
+     * }*/
+
+    // recursive cloning script
+
+    /**
+     * @param       $src_path
+     * @param       $dst_path
+     * @param bool $replace_code
+     * @param array $patKeys
+     * @param array $patValues
+     */
+    public static function cloneFileFolder($src_path, $dst_path, bool $replace_code = false, array $patKeys = [], array $patValues = []): void
+    {
+        // open the source directory
+        $dir = \opendir($src_path);
+        if (false === $dir) {
+            throw new \RuntimeException("Unable to open source directory: {$src_path}");
+        }
+        // Make the destination directory if not exist
+        if (!\is_dir($dst_path) && !\mkdir($dst_path, 0755) && !\is_dir($dst_path)) {
+            throw new \RuntimeException("Unable to create destination directory: {$dst_path}");
+        }
+
+        // Loop through the files in source directory
+        while ($file = \readdir($dir)) {
+            if (($file != '.') && ($file != '..')) {
+                if (\is_dir($src_path . '/' . $file)) {
+                    // Recursively calling custom copy function for sub directory
+                    self::cloneFileFolder($src_path . '/' . $file, $dst_path . '/' . $file, $replace_code, $patKeys, $patValues);
+                } else {
+                    self::cloneFile($src_path . '/' . $file, $dst_path . '/' . $file, $replace_code, $patKeys, $patValues);
+                }
+            }
+        }
+        \closedir($dir);
+    }
+
+    /**
+     * @param       $src_file
+     * @param       $dst_file
+     * @param bool $replace_code
+     * @param array $patKeys
+     * @param array $patValues
+     */
+    public static function cloneFile($src_file, $dst_file, bool $replace_code = false, array $patKeys = [], array $patValues = []): void
+    {
+        if ($replace_code) {
+            $noChangeExtensions = ['jpeg', 'jpg', 'gif', 'png', 'zip', 'ttf'];
+            if (\in_array(\mb_strtolower(\pathinfo($src_file, PATHINFO_EXTENSION)), $noChangeExtensions)) {
+                // image
+                if (!\copy($src_file, $dst_file)) {
+                    throw new \RuntimeException("Unable to copy {$src_file} to {$dst_file}");
+                }
+            } else {
+                // file, read it and replace text
+                $content = \file_get_contents($src_file);
+                if (false === $content) {
+                    throw new \RuntimeException("Unable to read source file: {$src_file}");
+                }
+                $content = \str_replace($patKeys, $patValues, $content);
+                //check file name whether it contains replace code
+                $path_parts = \pathinfo($dst_file);
+                $path       = $path_parts['dirname'];
+                $file       = $path_parts['basename'];
+                $dst_file   = $path . '/' . \str_replace($patKeys, $patValues, $file);
+                if (false === \file_put_contents($dst_file, $content)) {
+                    throw new \RuntimeException("Unable to write destination file: {$dst_file}");
+                }
+            }
+        } else {
+            if (!\copy($src_file, $dst_file)) {
+                throw new \RuntimeException("Unable to copy {$src_file} to {$dst_file}");
+            }
+        }
+    }
+}

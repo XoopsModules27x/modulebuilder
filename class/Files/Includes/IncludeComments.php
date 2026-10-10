@@ -1,0 +1,132 @@
+<?php declare(strict_types=1);
+
+namespace XoopsModules\Modulebuilder\Files\Includes;
+
+use XoopsModules\Modulebuilder;
+use XoopsModules\Modulebuilder\Files;
+
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
+/**
+ * modulebuilder module.
+ *
+ * @copyright       XOOPS Project (https://xoops.org)
+ * @license         GNU GPL 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+ *
+ * @since           2.5.0
+ *
+ * @author          Txmod Xoops https://xoops.org 
+ *                  Goffy https://myxoops.org
+ */
+
+/**
+ * Class IncludeComments.
+ */
+class IncludeComments extends Files\CreateFile
+{
+    /**
+     * @var mixed
+     */
+    private $xc = null;
+    /**
+     * @var mixed
+     */
+    private $pc = null;
+
+    /**
+     * @public function constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->xc  = Modulebuilder\Files\CreateXoopsCode::getInstance();
+        $this->pc  = Modulebuilder\Files\CreatePhpCode::getInstance();
+    }
+
+    /**
+     * @static function getInstance
+     *
+     * @return IncludeComments
+     */
+    public static function getInstance()
+    {
+        static $instance = false;
+        if (!$instance) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @public function write
+     * @param       $module
+     * @param mixed $table
+     */
+    public function write($module, $table): void
+    {
+        $this->setModule($module);
+        $this->setTable($table);
+    }
+
+    /**
+     * @public function getCommentsIncludes
+     * @param        $module
+     * @param string $filename
+     *
+     * @return string
+     */
+    public function renderCommentsIncludes($module, string $filename)
+    {
+        $moduleDirname = $module->getVar('mod_dirname');
+        $content       = $this->getHeaderFilesComments($module);
+        $content       .= $this->pc->getPhpCodeIncludeDir("\dirname(__DIR__, 2) . '/mainfile.php'",'',true, true);
+        $content       .= $this->pc->getPhpCodeIncludeDir("\XOOPS_ROOT_PATH.'/include/{$filename}.php'",'',true, true);
+
+        $this->create($moduleDirname, '', $filename . '.php', $content, \_AM_MODULEBUILDER_FILE_CREATED, \_AM_MODULEBUILDER_FILE_NOTCREATED);
+
+        return $this->renderFile();
+    }
+
+    /**
+     * @public function getCommentsNew
+     * @param        $module
+     * @param string $filename
+     *
+     * @return string
+     */
+    public function renderCommentsNew($module, string $filename)
+    {
+        $table         = $this->getTable();
+        $moduleDirname = \mb_strtolower($module->getVar('mod_dirname'));
+        $tableName     = $table->getVar('table_name');
+        $fields        = $this->getTableFields($table->getVar('table_mid'), $table->getVar('table_id'));
+        $fieldMain     = '';
+        foreach (\array_keys($fields) as $f) {
+            if (1 == $fields[$f]->getVar('field_main')) {
+                $fieldMain = $fields[$f]->getVar('field_name');
+            }
+        }
+        $content = $this->getHeaderFilesComments($module);
+        $content .= $this->pc->getPhpCodeUseNamespace(['Xmf', 'Request']);
+        $content .= $this->pc->getPhpCodeIncludeDir("__DIR__ . '/../../../mainfile.php'",'',true, true);
+        $content .= $this->pc->getPhpCodeIncludeDir("\XOOPS_ROOT_PATH.'/modules/{$moduleDirname}/class/{$tableName}.php'",'',true, true);
+        $content .= $this->xc->getXcXoopsRequest('com_itemid', 'com_itemid', '', 'Int');
+        $contIf  = $this->xc->getXcEqualsOperator("\${$tableName}Handler", "xoops_getModuleHandler('{$tableName}', '{$moduleDirname}')",'',"\t");
+        $contIf  .= $this->xc->getXcHandlerGet("{$tableName}", 'com_itemid','Obj', "{$tableName}Handler", false, "\t");
+        $contIf  .= $this->xc->getXcGetVar('com_replytitle', "{$tableName}Obj", $fieldMain,false, "\t");
+        $contIf  .= $this->pc->getPhpCodeIncludeDir("\XOOPS_ROOT_PATH.'/include/{$filename}.php'",'',true, true, '',"\t");
+        $content .= $this->pc->getPhpCodeConditions('$com_itemid',' > ', '0', $contIf);
+
+        $this->create($moduleDirname, 'include', $filename . '.php', $content, \_AM_MODULEBUILDER_FILE_CREATED, \_AM_MODULEBUILDER_FILE_NOTCREATED);
+
+        return $this->renderFile();
+    }
+}
