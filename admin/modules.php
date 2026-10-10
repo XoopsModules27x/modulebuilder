@@ -141,8 +141,8 @@ switch ($op) {
         $uploader = new \XoopsMediaUploader(
             TDMC_UPLOAD_IMGMOD_PATH, $helper->getConfig('mimetypes_image'), $helper->getConfig('maxsize_image'), null, null
         );
-        if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
-            $uploader->fetchMedia($_POST['xoops_upload_file'][0]);
+        $uploadFile = Request::getArray('xoops_upload_file');
+        if ($uploader->fetchMedia($uploadFile[0])) {
             if (!$uploader->upload()) {
                 $errors = &$uploader->getErrors();
                 \redirect_header('javascript:history.go(-1)', 3, $errors);
@@ -202,7 +202,7 @@ switch ($op) {
         break;
     case 'delete':
         $modulesObj = $helper->getHandler('Modules')->get($modId);
-        if (isset($_REQUEST['ok']) && 1 == $_REQUEST['ok']) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('modules.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -243,7 +243,7 @@ switch ($op) {
         if ($id > 0) {
             $modulesObj = $helper->getHandler('Modules')->get($id);
             foreach ($modFieldArray as $moduleField) {
-                if (isset($_POST['mod_' . $moduleField])) {
+                if (Request::hasVar('mod_' . $moduleField)) {
                     $modField = $modulesObj->getVar('mod_' . $moduleField);
                     $modulesObj->setVar('mod_' . $moduleField, !$modField);
                 }

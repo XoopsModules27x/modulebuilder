@@ -21,6 +21,8 @@
  * @author          Txmod Xoops <support@txmodxoops.org>
  */
 
+use Xmf\Request;
+
 // Define main template
 $templateMain = 'modulebuilder_settings.tpl';
 
@@ -81,7 +83,7 @@ switch ($op) {
         } else {
             $settingsObj = $helper->getHandler('Settings')->create();
         }
-        $setModuleDirname = \preg_replace('/[^a-zA-Z0-9]\s+/', '', \mb_strtolower($_POST['set_dirname']));
+        $setModuleDirname = \preg_replace('/[^a-zA-Z0-9]\s+/', '', \mb_strtolower(Request::getString('set_dirname')));
         //Form module save
         $settingsObj->setVars(
             [
@@ -159,7 +161,7 @@ switch ($op) {
         break;
     case 'delete':
         $settingsObj = $helper->getHandler('Settings')->get($setId);
-        if (isset($_REQUEST['ok']) && 1 == $_REQUEST['ok']) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('settings.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

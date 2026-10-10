@@ -21,6 +21,8 @@
  * @author          Txmod Xoops <support@txmodxoops.org>
  */
 
+use Xmf\Request;
+
 // Define main template
 $templateMain = 'modulebuilder_morefiles.tpl';
 
@@ -123,7 +125,7 @@ switch ($op) {
         break;
     case 'delete':
         $morefilesObj = $helper->getHandler('Morefiles')->get($fileId);
-        if (isset($_REQUEST['ok']) && 1 == $_REQUEST['ok']) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('morefiles.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
