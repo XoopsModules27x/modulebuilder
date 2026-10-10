@@ -133,14 +133,14 @@ switch ($op) {
         $fieldOrder = 1;
         // Set Variables
         $fieldId = Request::getArray('field_id');
+        $fieldOrders = Request::getArray('field_order');
         foreach ($fieldId as $key => $value) {
             if (isset($value)) {
                 $fieldsObj = $fields->get($value);
             } else {
                 $fieldsObj = $fields->create();
             }
-            $fieldOrder = Request::getArray('field_order');
-            $order = $fieldsObj->isNew() ? $fieldOrder : $fieldOrder[$key];
+            $order = $fieldsObj->isNew() ? $fieldOrder : ($fieldOrders[$key] ?? $fieldOrder);
             // Set Data
             $fieldsObj->setVar('field_mid', $fieldMid);
             $fieldsObj->setVar('field_tid', $fieldTid);
@@ -165,7 +165,7 @@ switch ($op) {
             $fieldsObj->setVar('field_tbody', (1 == Request::getArray('field_tbody')[$key]) ? 1 : 0);
             $fieldsObj->setVar('field_tfoot', (1 == Request::getArray('field_tfoot')[$key]) ? 1 : 0);
             $fieldsObj->setVar('field_block', (1 == Request::getArray('field_block')[$key]) ? 1 : 0);
-            $fieldsObj->setVar('field_main', ($key == Request::getArray('field_main') ? 1 : 0));
+            $fieldsObj->setVar('field_main', ($key == Request::getInt('field_main') ? 1 : 0));
             $fieldsObj->setVar('field_search', (1 == Request::getArray('field_search')[$key]) ? 1 : 0);
             $fieldsObj->setVar('field_required', (1 == Request::getArray('field_required')[$key]) ? 1 : 0);
             // Insert Data

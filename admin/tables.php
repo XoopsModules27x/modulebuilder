@@ -152,8 +152,7 @@ switch ($op) {
         $uploader  = new \XoopsMediaUploader(
             $uploaddir, $helper->getConfig('mimetypes_image'), $helper->getConfig('maxsize_image'), null, null
         );
-        if ($uploader->fetchMedia(Request::getString('xoops_upload_file', '', 'POST')[0])) {
-            $uploader->fetchMedia(Request::getString('xoops_upload_file', '', 'POST')[0]);
+        if ($uploader->fetchMedia(Request::getArray('xoops_upload_file')[0])) {
             if (!$uploader->upload()) {
                 $errors = $uploader->getErrors();
                 \redirect_header('javascript:history.go(-1)', 3, $errors);
