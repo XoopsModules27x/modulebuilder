@@ -81,7 +81,7 @@ class UserPrint extends Files\CreateFile
      * @public function getUserPrint
      * @param string $moduleDirname
      * @param string $language
-     *
+     * @param int $tablePermissions
      * @return string
      */
     public function getUserPrint(string $moduleDirname, string $language, int $tablePermissions)

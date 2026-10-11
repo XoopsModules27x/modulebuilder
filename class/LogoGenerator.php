@@ -100,9 +100,6 @@ class LogoGenerator
 
         \imagepng($imageModule, \XOOPS_ROOT_PATH . $targetImage);
 
-        \imagedestroy($imageModule);
-        \imagedestroy($imageIcon);
-
         return \XOOPS_URL . $targetImage;
     }
 }

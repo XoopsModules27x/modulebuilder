@@ -267,7 +267,7 @@ class UserXoopsVersion extends Files\CreateFile
         $ret          = $this->getDashComment('Comments');
         $ret          .= $this->uxc->getUserModVersionText(1, '1', 'hasComments');
         $ret          .= $this->uxc->getUserModVersionText(2, "'{$tableName}.php'", 'comments', "'pageName'");
-        $ret          .= $this->uxc->getUserModVersionText(2, "'{$fieldId}'", 'comments', "'itemName'");
+        $ret          .= $this->uxc->getUserModVersionText(2, "'$fieldId'", 'comments', "'itemName'");
         $ret          .= Modulebuilder\Files\CreatePhpCode::getInstance()->getPhpCodeCommentLine('Comment callback functions');
         $ret          .= $this->uxc->getUserModVersionText(2, "'include/comment_functions.php'", 'comments', "'callbackFile'");
         $descriptions = ['approve' => "'{$moduleDirname}CommentsApprove'", 'update' => "'{$moduleDirname}CommentsUpdate'"];
@@ -984,8 +984,8 @@ class UserXoopsVersion extends Files\CreateFile
         $ret              .= $this->pc->getPhpCodeCommentLine('Make Sample button visible?');
         $maintainedby     = [
             'name'        => "'displaySampleButton'",
-            'title'       => "'CO_' . \$moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON'",
-            'description' => "'CO_' . \$moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC'",
+            'title'       => "'_CO_' . \$moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON'",
+            'description' => "'_CO_' . \$moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC'",
             'formtype'    => "'yesno'",
             'valuetype'   => "'int'",
             'default'     => '1',
@@ -1189,23 +1189,23 @@ class UserXoopsVersion extends Files\CreateFile
         $ret  .= $this->xc->getXcEqualsOperator('$iniUploadMaxFileSize', "{$moduleDirname}ReturnBytes(\ini_get('upload_max_filesize'))");
         $ret   .= $this->xc->getXcEqualsOperator('$maxSize             ', 'min($iniPostMaxSize, $iniUploadMaxFileSize)');
         $cond = $this->xc->getXcEqualsOperator('$increment', '500', null, "\t");
-        $ret  .= $this->pc->getPhpCodeConditions('$maxSize', ' > ', '10000 * 1048576', $cond, false, '');
+        $ret  .= $this->pc->getPhpCodeConditions('$maxSize', ' > ', '10000 * 1048576', $cond);
         $cond = $this->xc->getXcEqualsOperator('$increment', '200', null, "\t");
-        $ret  .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '10000 * 1048576', $cond, false, '');
+        $ret  .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '10000 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '100', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '5000 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '5000 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '50', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '2500 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '2500 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '10', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '1000 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '1000 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '5', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '500 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '500 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '2', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '100 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '100 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '1', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '50 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '50 * 1048576', $cond);
         $cond  = $this->xc->getXcEqualsOperator('$increment', '0.5', null, "\t");
-        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '25 * 1048576', $cond, false, '');
+        $ret   .= $this->pc->getPhpCodeConditions('$maxSize', ' <= ', '25 * 1048576', $cond);
         $ret   .= $this->xc->getXcEqualsOperator('$optionMaxsize', '[]');
         $ret   .= $this->xc->getXcEqualsOperator('$i', '$increment');
         $while = $this->xc->getXcEqualsOperator("\$optionMaxsize[\$i . ' ' . _MI_{$ucModuleDirname}_SIZE_MB]", '$i * 1048576', null, "\t");

@@ -30,7 +30,7 @@ use XoopsModules\Modulebuilder;
 class FieldtypeHandler extends \XoopsPersistableObjectHandler
 {
     /**
-     * @param null|\XoopsDatabase|\XoopsMySQLDatabase $db
+     * @param \XoopsDatabase $db
      */
     public function __construct(\XoopsDatabase $db)
     {

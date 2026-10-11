@@ -31,7 +31,7 @@ class FieldelementsHandler extends \XoopsPersistableObjectHandler
 {
     /**
      * @public function constructor class
-     * @param null|\XoopsDatabase|\XoopsMySQLDatabase $db
+     * @param \XoopsDatabase $db
      */
     public function __construct(\XoopsDatabase $db)
     {

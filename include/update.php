@@ -156,6 +156,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -561,7 +564,7 @@ function modulebuilder_check_db($module)
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_fieldelements');
     $field   = 'fieldelement_defvalue';
     $sql = "ALTER TABLE `$table` CHANGE `$field` `$field` varchar(5) NULL DEFAULT NULL;";
-    if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+    if (!$GLOBALS['xoopsDB']->exec($sql)) {
         xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
         $module->setErrors("Error when changing '$field' in table '$table'.");
         $ret = false;
@@ -731,11 +734,11 @@ function modulebuilder_check_db($module)
     // update table 'modulebuilder_tables'
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_tables');
     $field   = 'table_reads';
-    $check   = $GLOBALS['xoopsDB']->queryF('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $field . "'");
+    $check   = $GLOBALS['xoopsDB']->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $field . "'");
     $numRows = $GLOBALS['xoopsDB']->getRowsNum($check);
     if (!$numRows) {
         $sql = "ALTER TABLE `$table` ADD `$field` TINYINT(1) NOT NULL DEFAULT '0' AFTER `table_rss`;";
-        if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+        if (!$GLOBALS['xoopsDB']->exec($sql)) {
             xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
             $module->setErrors("Error when adding '$field' to table '$table'.");
             $ret = false;
@@ -746,7 +749,7 @@ function modulebuilder_check_db($module)
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_settings');
     $field   = 'set_min_xoops';
     $sql = "ALTER TABLE `$table` CHANGE `$field` `$field` varchar(15) NOT NULL DEFAULT '1.0';";
-    if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+    if (!$GLOBALS['xoopsDB']->query($sql)) {
         xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
         $module->setErrors("Error when changing '$field' in table '$table'.");
         $ret = false;
@@ -756,7 +759,7 @@ function modulebuilder_check_db($module)
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_modules');
     $field   = 'mod_min_xoops';
     $sql = "ALTER TABLE `$table` CHANGE `$field` `$field` varchar(15) NOT NULL DEFAULT '1.0';";
-    if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+    if (!$GLOBALS['xoopsDB']->exec($sql)) {
         xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
         $module->setErrors("Error when changing '$field' in table '$table'.");
         $ret = false;
@@ -766,7 +769,7 @@ function modulebuilder_check_db($module)
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_modules');
     $field   = 'mod_since';
     $sql = "ALTER TABLE `$table` CHANGE `$field` `$field` varchar(10) NOT NULL DEFAULT '1.0';";
-    if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+    if (!$GLOBALS['xoopsDB']->exec($sql)) {
         xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
         $module->setErrors("Error when changing '$field' in table '$table'.");
         $ret = false;
@@ -775,11 +778,11 @@ function modulebuilder_check_db($module)
     // update table 'modulebuilder_fieldelements'
     $table   = $GLOBALS['xoopsDB']->prefix('modulebuilder_fieldelements');
     $field   = 'fieldelement_deffield';
-    $check   = $GLOBALS['xoopsDB']->queryF('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $field . "'");
+    $check   = $GLOBALS['xoopsDB']->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $field . "'");
     $numRows = $GLOBALS['xoopsDB']->getRowsNum($check);
     if (!$numRows) {
         $sql = "ALTER TABLE `$table` ADD `$field` VARCHAR(5) NOT NULL DEFAULT '' AFTER `fieldelement_defvalue`;";
-        if (!$GLOBALS['xoopsDB']->queryF($sql)) {
+        if (!$GLOBALS['xoopsDB']->exec($sql)) {
             xoops_error($GLOBALS['xoopsDB']->error() . '<br>' . $sql);
             $module->setErrors("Error when adding '$field' to table '$table'.");
             $ret = false;

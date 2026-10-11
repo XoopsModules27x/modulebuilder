@@ -176,13 +176,13 @@ class UserPages extends Files\CreateFile
             $contIf .= $this->xc->getXcXoopsTplAssign('rating_10stars', "(Constants::RATING_10STARS === {$varRate})", true, $t . "\t");
             $contIf .= $this->xc->getXcXoopsTplAssign('rating_10num', "(Constants::RATING_10NUM === {$varRate})", true, $t . "\t");
             $contIf .= $this->xc->getXcXoopsTplAssign('rating_likes', "(Constants::RATING_LIKES === {$varRate})", true, $t . "\t");
-            $contIf .= $this->xc->getXcXoopsTplAssign('itemid', "'{$fieldId}'", true, $t . "\t");
+            $contIf .= $this->xc->getXcXoopsTplAssign('itemid', "'$fieldId'", true, $t . "\t");
             $contIf .= $this->xc->getXcXoopsTplAssign($moduleDirname . '_icon_url_16', "\\{$stuModuleDirname}_URL . '/' . \$modPathIcon16", true, $t . "\t");
             $ret .= $this->pc->getPhpCodeConditions($varRate, ' > ', '0', $contIf, false, $t);
         }
         $critName  = 'cr' . $ucfTableName;
         $ret       .= $this->xc->getXcCriteriaCompo($critName, $t);
-        $crit      = $this->xc->getXcCriteria('', "'{$fieldId}'", "\${$ccFieldId}",'',true);
+        $crit      = $this->xc->getXcCriteria('', "'$fieldId'", "\${$ccFieldId}",'',true);
         $contIf    = $this->xc->getXcCriteriaAdd($critName, $crit, $t . "\t");
         $ret       .= $this->pc->getPhpCodeConditions("\${$ccFieldId}", ' > ', '0', $contIf, false, $t);
         $ret       .= $this->xc->getXcHandlerCountClear($tableName . 'Count', $tableName, '$' . $critName, $t);
@@ -230,10 +230,7 @@ class UserPages extends Files\CreateFile
             $getVar = $this->xc->getXcGetVar('', "{$tableName}Obj", $fieldReads, true);
 
             $tablenameObj  = $this->pc->getPhpCodeIsobject($tableName . 'Obj');
-                        $condIf3           .= $this->pc->getPhpCodeConditions('!' . $tablenameObj, '', '', $redirectError, false, $t . "\t\t");
-
-
-
+            $condIf3 .= $this->pc->getPhpCodeConditions('!' . $tablenameObj, '', '', $redirectError, false, $t . "\t\t");
             $condIf3 .= $this->xc->getXcEqualsOperator("\${$ccFieldReads}", '(int)' . $getVar . ' + 1', false, $t . "\t\t");
             $condIf3 .= $this->xc->getXcSetVarObj($tableName, $fieldReads, "\${$ccFieldReads}", $t . "\t\t");
             $condIf3 .= $this->pc->getPhpCodeCommentLine('Insert Data', null, $t . "\t\t");
@@ -393,11 +390,13 @@ class UserPages extends Files\CreateFile
      */
     private function getPermissionsSave($moduleDirname, $ucfFieldId, string $perm = 'view')
     {
+        $ccGroupsPerm = $this->getCamelCase("groups_$perm", false, true);
         $ret     = $this->pc->getPhpCodeCommentLine('Permission to', $perm, "\t\t\t");
         $ret     .= $this->xc->getXcDeleteRight('grouppermHandler', "{$moduleDirname}_{$perm}", '$mid', "\$new{$ucfFieldId}", false, "\t\t\t");
         $content = $this->xc->getXcAddRight('grouppermHandler', "{$moduleDirname}_{$perm}", "\$new{$ucfFieldId}", '$onegroupId', '$mid', false, "\t\t\t\t\t");
-        $foreach = $this->pc->getPhpCodeForeach("_POST['groups_{$perm}']", false, false, 'onegroupId', $content, "\t\t\t\t");
-        $ret     .= $this->pc->getPhpCodeConditions("isset(\$_POST['groups_{$perm}'])", '', '', $foreach, false, "\t\t\t");
+        $foreach = $this->pc->getPhpCodeForeach($ccGroupsPerm, false, false, 'onegroupId', $content, "\t\t\t\t");
+        $ret     .= $this->xc->getXcXoopsRequest($ccGroupsPerm, 'groups_'. $perm, '', 'Array', "\t\t\t");
+        $ret     .= $this->pc->getPhpCodeConditions('!empty($' . $ccGroupsPerm . ')', '', '', $foreach, false, "\t\t\t");
 
         return $ret;
     }

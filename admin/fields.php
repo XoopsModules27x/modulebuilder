@@ -208,9 +208,10 @@ switch ($op) {
         $error = false;
         // Initialize fields handler
         $fieldsHandler = $helper->getHandler('Fields');
-        if (isset($_POST['forder'])) {
+        $fOrder = Request::getArray('forder');
+        if (!empty($fOrder)) {
             $i = 0;
-            foreach ($_POST['forder'] as $order) {
+            foreach ($fOrder as $order) {
                 if ($order > 0) {
                     $fieldsObj = $fieldsHandler->get((int)$order);
                     if ($fieldsObj instanceof \XoopsObject) {
@@ -240,7 +241,7 @@ switch ($op) {
         if ($fieldId > 0) {
             $fieldsObj = $helper->getHandler('Fields')->get($fieldId);
             foreach ($fieldsArray as $field) {
-                if (isset($_POST['field_' . $field])) {
+                if (Request::hasVar('field_' . $field)) {
                     $fldField = $fieldsObj->getVar('field_' . $field);
                     $fieldsObj->setVar('field_' . $field, !$fldField);
                 }

@@ -648,11 +648,14 @@ class CreateXoopsCode
     {
         $ret        = '';
         $intVars    = ('' != $var2) ? "'{$var1}', {$var2}" : "'{$var1}'";
-        $stringVars = ('' != $var2) ? "'{$var1}', {$var2}" : "'{$var1}'";
+        $stringVars = ('' != $var2) ? "'{$var1}', '{$var2}'" : "'{$var1}'";
+        $arrayVars = ('' != $var2) ? "'{$var1}', {$var2}" : "'{$var1}'";
         if ('String' === $type) {
             $ret .= "{$t}\${$left} = Request::getString({$stringVars});\n";
         } elseif ('Int' === $type) {
             $ret .= "{$t}\${$left} = Request::getInt({$intVars});\n";
+        } elseif ('Array' === $type) {
+            $ret .= "{$t}\${$left} = Request::getArray({$arrayVars});\n";
         } else {
             $ret .= "{$t}\${$left} = Request::get{$type}('{$var1}', '{$var2}');\n";
         }
@@ -940,7 +943,7 @@ class CreateXoopsCode
                         $countUploader++;
                         break;
                     case 12:
-                        $ret .= $axc->getAxcSetVarUploadFile($moduleDirname, $tableName, $fieldName, true, $countUploader, $fieldMain);
+                        $ret .= $axc->getAxcSetVarUploadFile($moduleDirname, $tableName, $fieldName, true, (string)$countUploader, $fieldMain);
                         $countUploader++;
                         break;
                     case 13:
@@ -1852,8 +1855,6 @@ class CreateXoopsCode
         $redirectError        = $xc->getXcRedirectHeader($tableName, '', '3', "{$language}INVALID_PARAM", true, $t . "\t");
         $ret                  .= $pc->getPhpCodeConditions('!' . $tablenameObj, '', '', $redirectError, false, $t);
         $ret                  .= $xc->getXcGetVar($ccFieldMain, "{$tableName}Obj", $fieldMain, false, $t);
-        $reqOk                = "_REQUEST['ok']";
-        $isset                = $pc->getPhpCodeIsset($reqOk);
         $xoopsSecurityCheck   = $xc->getXcXoopsSecurityCheck();
         $xoopsSecurityErrors  = $xc->getXcXoopsSecurityErrors();
         $implode              = $pc->getPhpCodeImplode(', ', $xoopsSecurityErrors);
@@ -1874,7 +1875,7 @@ class CreateXoopsCode
         $internalElse = $xc->getXcXoopsTplAssign('error', $htmlErrors, true, $t . "\t\t");
         $condition    .= $pc->getPhpCodeConditions($delete, '', '', $contInsert, $internalElse, $t . "\t");
         $mainElse     = $xc->getXcXoopsConfirm($language, $fieldId, $fieldMain, 'delete', $t . "\t");
-        $ret          .= $pc->getPhpCodeConditions($isset, ' && ', "1 == \${$reqOk}", $condition, $mainElse, $t);
+        $ret          .= $pc->getPhpCodeConditions("Request::getInt('ok')", ' === ', '1', $condition, $mainElse, $t);
 
         return $ret;
     }

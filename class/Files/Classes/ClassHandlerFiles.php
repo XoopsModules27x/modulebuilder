@@ -39,10 +39,6 @@ class ClassHandlerFiles extends Files\CreateFile
      * @var mixed
      */
     private $pc = null;
-    /**
-     * @var mixed
-     */
-    //private $helper = null;
 
     /**
      * @public function constructor
@@ -352,7 +348,7 @@ class ClassHandlerFiles extends Files\CreateFile
         $namespace = $this->pc->getPhpCodeNamespace(['XoopsModules', $moduleDirname]);
         $content   = $this->getHeaderFilesComments($module, null, $namespace);
         $content   .= $this->pc->getPhpCodeUseNamespace(['XoopsModules', $moduleDirname]);
-        $content   .= $this->getClassObjectHandler($moduleDirname, $table, $fieldId, $fieldMain, $fieldParentId, $fieldElement);
+        $content   .= $this->getClassObjectHandler($moduleDirname, $table, (string)$fieldId, (string)$fieldMain, $fieldParentId, $fieldElement);
 
         $this->create($moduleDirname, 'class', $filename, $content, \_AM_MODULEBUILDER_FILE_CREATED, \_AM_MODULEBUILDER_FILE_NOTCREATED);
 

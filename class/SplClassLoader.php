@@ -52,7 +52,7 @@ class SplClassLoader
      * @param string|null $ns The namespace to use
      * @param null   $includePath
      */
-    public function __construct(string $ns = null, $includePath = null)
+    public function __construct(?string $ns = null, $includePath = null)
     {
         $this->_namespace   = $ns;
         $this->_includePath = $includePath;

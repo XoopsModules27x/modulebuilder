@@ -27,7 +27,7 @@ trait VersionChecks
      * @param null|string $requiredVer
      * @return bool true if meets requirements, false if not
      */
-    public static function checkVerXoops(\XoopsModule $module = null, $requiredVer = null)
+    public static function checkVerXoops(?\XoopsModule $module = null, $requiredVer = null)
     {
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
         $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
@@ -44,7 +44,7 @@ trait VersionChecks
         }
         $success = true;
 
-        if ($module->versionCompare($currentVer, $requiredVer, '<')) {
+        if ($module->versionCompare($currentVer, $requiredVer)) {
             $success = false;
             $module->setErrors(\sprintf(\constant('_CO_MODULEBUILDER_ERROR_BAD_XOOPS'), $requiredVer, $currentVer));
         }
@@ -59,7 +59,7 @@ trait VersionChecks
      * @param \XoopsModule|null $module
      * @return bool true if meets requirements, false if not
      */
-    public static function checkVerPhp(\XoopsModule $module = null)
+    public static function checkVerPhp(?\XoopsModule $module = null)
     {
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
         $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
@@ -137,7 +137,6 @@ trait VersionChecks
                         $ret[] = $latestVersionLink;
                     }
                 }
-                \curl_close($curlHandle);
             }
         }
 

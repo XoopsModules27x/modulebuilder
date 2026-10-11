@@ -128,7 +128,7 @@ class Logo
         // Write text
         $textColor     = imagecolorallocate($imageModule, 0, 0, 0);
         $spaceToBorder = (92 - mb_strlen($moduleDirname) * 7.5) / 2;
-        imagefttext($imageModule, 8.5, 0, $spaceToBorder, 45, $textColor, $font, \ucfirst($moduleDirname));
+        imagefttext($imageModule, 8.5, 0, (int)$spaceToBorder, 45, $textColor, $font, \ucfirst($moduleDirname));
 
         imagecopy($imageModule, $imageIcon, 29, 2, 0, 0, 32, 32);
 
@@ -136,9 +136,6 @@ class Logo
         $targetImage = '/uploads/' . $dirname . '/images/modules/' . $moduleDirname . '_logo.png';
 
         \imagepng($imageModule, \XOOPS_ROOT_PATH . $targetImage);
-
-        \imagedestroy($imageModule);
-        \imagedestroy($imageIcon);
 
         return \XOOPS_URL . $targetImage;
     }

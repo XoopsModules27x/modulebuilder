@@ -563,21 +563,21 @@ class CreateFile extends CreateTableFields
                 if ($this->xf->writable()) {
                     // Integration of the content in the file
                     if (!$this->xf->write($this->getContent(), $mode, true)) {
-                        $ret .= \sprintf($notCreated, $fileName, $folderName);
+                        $ret .= \sprintf((string)$notCreated, $fileName, $folderName);
                         $GLOBALS['xoopsTpl']->assign('created', false);
 
                         return $ret;
                     }
                     // Created
-                    $ret .= \sprintf($created, $fileName, $folderName);
+                    $ret .= \sprintf((string)$created, $fileName, $folderName);
                     $GLOBALS['xoopsTpl']->assign('created', true);
                     $this->xf->close();
                 } else {
-                    $ret .= \sprintf($notCreated, $fileName, $folderName);
+                    $ret .= \sprintf((string)$notCreated, $fileName, $folderName);
                     $GLOBALS['xoopsTpl']->assign('created', false);
                 }
             } else {
-                $ret .= \sprintf($notCreated, $fileName, $folderName);
+                $ret .= \sprintf((string)$notCreated, $fileName, $folderName);
                 $GLOBALS['xoopsTpl']->assign('created', false);
             }
         }

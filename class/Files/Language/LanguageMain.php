@@ -233,7 +233,7 @@ class LanguageMain extends Files\CreateFile
         $module        = $this->getModule();
         $filename      = $this->getFileName();
         $moduleDirname = $module->getVar('mod_dirname');
-        $language      = $this->getLanguage($moduleDirname, 'MA', '', false);
+        $language      = $this->getLanguage($moduleDirname, 'MD', '', false);
         $content       = $this->getHeaderFilesComments($module);
         $content       .= $this->getLanguageMain($module, $language);
         $content       .= $this->getLanguageMainFooter($language);
