@@ -76,6 +76,9 @@ function update_modulebuilder_v191($module)
         'SELECT t1.tpl_id FROM ' . $xoopsDB->prefix('tplfile') . ' t1, ' . $xoopsDB->prefix('tplfile') . ' t2 WHERE t1.tpl_refid = t2.tpl_refid AND t1.tpl_module = t2.tpl_module AND t1.tpl_tplset=t2.tpl_tplset AND t1.tpl_file = t2.tpl_file AND t1.tpl_type = t2.tpl_type AND t1.tpl_id > t2.tpl_id'
     );
     $tplids = [];
+    if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+        throw new \RuntimeException('Database query failed');
+    }
     while ([$tplid] = $xoopsDB->fetchRow($result)) {
         $tplids[] = $tplid;
     }
@@ -98,6 +101,9 @@ function update_modulebuilder_v191($module)
         return false;
     }
     $ret = [];
+    if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+        throw new \RuntimeException('Database query failed');
+    }
     while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
         $ret[] = $myrow;
     }
@@ -179,7 +185,10 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
-            [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
+                        if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
+[$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
             if (!$xoopsDB->query($sql)) { $ret = false; }
@@ -208,6 +217,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -237,6 +249,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -266,6 +281,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -295,6 +313,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -324,6 +345,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";
@@ -466,6 +490,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -504,6 +531,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -552,6 +582,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -589,6 +622,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -626,6 +662,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -663,6 +702,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql    = 'INSERT INTO `'
@@ -760,6 +802,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             list($fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue, $fe_deffield) = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`, `fieldelement_sort`, `fieldelement_deftype`, `fieldelement_defvalue`, `fieldelement_deffield`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}', '{$fe_sort}', '{$fe_deftype}', '{$fe_defvalue}', '{$fe_deffield}')";
@@ -792,6 +837,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             list($fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue, $fe_deffield) = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`, `fieldelement_sort`, `fieldelement_deftype`, `fieldelement_defvalue`, `fieldelement_deffield`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}', '{$fe_sort}', '{$fe_deftype}', '{$fe_defvalue}', '{$fe_deffield}')";
@@ -825,6 +873,9 @@ function modulebuilder_check_db($module)
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
+            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+                throw new \RuntimeException('Database query failed');
+            }
             list($fe_mid, $fe_tid, $fe_name, $fe_value, $fe_sort, $fe_deftype, $fe_defvalue, $fe_deffield) = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`, `fieldelement_sort`, `fieldelement_deftype`, `fieldelement_defvalue`, `fieldelement_deffield`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}', '{$fe_sort}', '{$fe_deftype}', '{$fe_defvalue}', '{$fe_deffield}')";

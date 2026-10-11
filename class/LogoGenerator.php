@@ -23,6 +23,9 @@ use XoopsModules\Modulebuilder;
  *
  * @author          Xoops Team Developement Modules - https://xoops.org
  */
+
+use Xmf\Request;
+
 require_once \dirname(__DIR__, 3) . '/mainfile.php';
 
 /**
@@ -34,10 +37,10 @@ function phpFunction(string $val = ''): void
     echo $val;
 }
 
-$myfunction = '\\XoopsModules\\Modulebuilder\\' . $_GET['f'];
+$myfunction = '\\XoopsModules\\Modulebuilder\\' . Request::getString('f');
 
 if (\function_exists($myfunction)) {
-    $ret = \XoopsModules\Modulebuilder\LogoGenerator::createLogo($_GET['iconName'], $_GET['caption']);
+    $ret = \XoopsModules\Modulebuilder\LogoGenerator::createLogo(Request::getString('iconName'), Request::getString('caption'));
     if (false !== $ret) {
         phpFunction($ret);
     }

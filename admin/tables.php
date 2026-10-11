@@ -22,26 +22,28 @@
  *                  Goffy https://myxoops.org
  */
 
+use Xmf\Request;
+
 // Define main template
 $templateMain = 'modulebuilder_tables.tpl';
 
 require __DIR__ . '/header.php';
 // Recovered value of arguments op in the URL $
-$op = \Xmf\Request::getString('op', 'list');
+$op = Request::getString('op', 'list');
 
-$modId = \Xmf\Request::getInt('mod_id');
+$modId = Request::getInt('mod_id');
 // Request vars
-$tableId         = \Xmf\Request::getInt('table_id');
-$tableMid        = \Xmf\Request::getInt('table_mid');
-$tableName       = \Xmf\Request::getInt('table_name');
-$tableNumbFields = \Xmf\Request::getInt('table_nbfields');
-$tableFieldname  = \Xmf\Request::getString('table_fieldname');
+$tableId         = Request::getInt('table_id');
+$tableMid        = Request::getInt('table_mid');
+$tableName       = Request::getInt('table_name');
+$tableNumbFields = Request::getInt('table_nbfields');
+$tableFieldname  = Request::getString('table_fieldname');
 
 switch ($op) {
     case 'list':
     default:
-        $start = \Xmf\Request::getInt('start');
-        $limit = \Xmf\Request::getInt('limit', $helper->getConfig('modules_adminpager'));
+        $start = Request::getInt('start');
+        $limit = Request::getInt('limit', $helper->getConfig('modules_adminpager'));
         $GLOBALS['xoTheme']->addStylesheet('modules/modulebuilder/assets/css/admin/style.css');
         $GLOBALS['xoTheme']->addScript('browse.php?Frameworks/jquery/plugins/jquery.ui.js');
         $GLOBALS['xoTheme']->addScript('modules/modulebuilder/assets/js/functions.js');
@@ -124,21 +126,21 @@ switch ($op) {
             unset($criteria);
             //unset($criteria);
             foreach (\array_keys($tableNameSearch) as $t) {
-                if ($tableNameSearch[$t]->getVar('table_name') === \Xmf\Request::getString('table_name', '', 'POST')) {
-                    \redirect_header('tables.php?op=new', 3, \sprintf(\_AM_MODULEBUILDER_TABLE_ERROR_NAME_EXIST, \Xmf\Request::getString('table_name', '', 'POST')));
+                if ($tableNameSearch[$t]->getVar('table_name') === Request::getString('table_name', '', 'POST')) {
+                    \redirect_header('tables.php?op=new', 3, \sprintf(\_AM_MODULEBUILDER_TABLE_ERROR_NAME_EXIST, Request::getString('table_name', '', 'POST')));
                 }
             }
             $tablesObj = $tables->create();
         }
-        $tableOrder = \Xmf\Request::getInt('table_order');
+        $tableOrder = Request::getInt('table_order');
         $order      = $tablesObj->isNew() ? $tableOrder + 1 : $tableOrder;
         // Form save tables
         $tablesObj->setVars(
             [
                 'table_mid'       => $tableMid,
-                'table_name'      => \Xmf\Request::getString('table_name', '', 'POST'),
-                'table_solename'  => \Xmf\Request::getString('table_solename', '', 'POST'),
-                'table_category'  => (1 == $_REQUEST['table_category']) ? 1 : 0,
+                'table_name'      => Request::getString('table_name', '', 'POST'),
+                'table_solename'  => Request::getString('table_solename', '', 'POST'),
+                'table_category'  => (1 == Request::getInt('table_category')) ? 1 : 0,
                 'table_fieldname' => $tableFieldname,
                 'table_nbfields'  => $tableNumbFields,
                 'table_order'     => $order,
@@ -150,8 +152,7 @@ switch ($op) {
         $uploader  = new \XoopsMediaUploader(
             $uploaddir, $helper->getConfig('mimetypes_image'), $helper->getConfig('maxsize_image'), null, null
         );
-        if ($uploader->fetchMedia(\Xmf\Request::getString('xoops_upload_file', '', 'POST')[0])) {
-            $uploader->fetchMedia(\Xmf\Request::getString('xoops_upload_file', '', 'POST')[0]);
+        if ($uploader->fetchMedia(Request::getArray('xoops_upload_file')[0])) {
             if (!$uploader->upload()) {
                 $errors = $uploader->getErrors();
                 \redirect_header('javascript:history.go(-1)', 3, $errors);
@@ -159,11 +160,11 @@ switch ($op) {
                 $tablesObj->setVar('table_image', $uploader->getSavedFileName());
             }
         } else {
-            $tablesObj->setVar('table_image', \Xmf\Request::getString('table_image', '', 'POST'));
+            $tablesObj->setVar('table_image', Request::getString('table_image', '', 'POST'));
         }
-        $tablesObj->setVar('table_autoincrement', (1 == $_REQUEST['table_autoincrement']) ? 1 : 0);
+        $tablesObj->setVar('table_autoincrement', (1 == Request::getInt('table_autoincrement')) ? 1 : 0);
         // Options
-        $tableOption = \Xmf\Request::getArray('table_option');
+        $tableOption = Request::getArray('table_option');
         $tablesObj->setVar('table_install', \in_array('install', $tableOption));
         $tablesObj->setVar('table_index', \in_array('index', $tableOption));
         $tablesObj->setVar('table_blocks', \in_array('blocks', $tableOption));
@@ -193,15 +194,15 @@ switch ($op) {
                 $fieldelementObj = $helper->getHandler('Fieldelements')->create();
                 $fieldelementObj->setVar('fieldelement_mid', $tableMid);
                 $fieldelementObj->setVar('fieldelement_tid', $tableTid);
-                $fieldelementObj->setVar('fieldelement_name', 'Table : ' . \ucfirst(\Xmf\Request::getString('table_name', '', 'POST')));
-                $fieldelementObj->setVar('fieldelement_value', 'XoopsFormTables-' . \ucfirst(\Xmf\Request::getString('table_name', '', 'POST')));
+                $fieldelementObj->setVar('fieldelement_name', 'Table : ' . \ucfirst(Request::getString('table_name', '', 'POST')));
+                $fieldelementObj->setVar('fieldelement_value', 'XoopsFormTables-' . \ucfirst(Request::getString('table_name', '', 'POST')));
                 $fieldelementObj->setVar('fieldelement_deftype', 2);
                 $fieldelementObj->setVar('fieldelement_defvalue', 10);
                 // Insert new field element id for table name
                 if (!$helper->getHandler('Fieldelements')->insert($fieldelementObj)) {
                     $GLOBALS['xoopsTpl']->assign('error', $fieldelementObj->getHtmlErrors() . ' Field element');
                 }
-                \redirect_header('fields.php?op=new' . $tableAction, 5, \sprintf(\_AM_MODULEBUILDER_TABLE_FORM_CREATED_OK, \Xmf\Request::getString('table_name', '', 'POST')));
+                \redirect_header('fields.php?op=new' . $tableAction, 5, \sprintf(\_AM_MODULEBUILDER_TABLE_FORM_CREATED_OK, Request::getString('table_name', '', 'POST')));
             } else {
                 // table exists, recreate fieldelement_name/fieldelement_value in order to catch changes of table name
                 $crFieldelements = new \CriteriaCompo();
@@ -210,15 +211,15 @@ switch ($op) {
                 $fieldelementsAll = $helper->getHandler('Fieldelements')->getAll($crFieldelements);
                 foreach (\array_keys($fieldelementsAll) as $feid) {
                     $fieldelementObj = $helper->getHandler('Fieldelements')->get($feid);
-                    $fieldelementObj->setVar('fieldelement_name', 'Table : ' . \ucfirst(\Xmf\Request::getString('table_name', '', 'POST')));
-                    $fieldelementObj->setVar('fieldelement_value', 'XoopsFormTables-' . \ucfirst(\Xmf\Request::getString('table_name', '', 'POST')));
+                    $fieldelementObj->setVar('fieldelement_name', 'Table : ' . \ucfirst(Request::getString('table_name', '', 'POST')));
+                    $fieldelementObj->setVar('fieldelement_value', 'XoopsFormTables-' . \ucfirst(Request::getString('table_name', '', 'POST')));
                     // Insert new field element id for table name
                     if (!$helper->getHandler('Fieldelements')->insert($fieldelementObj)) {
                         $GLOBALS['xoopsTpl']->assign('error', $fieldelementObj->getHtmlErrors() . ' Field element');
                     }
                 }
 
-                \redirect_header('tables.php', 5, \sprintf(\_AM_MODULEBUILDER_TABLE_FORM_UPDATED_OK, \Xmf\Request::getString('table_name', '', 'POST')));
+                \redirect_header('tables.php', 5, \sprintf(\_AM_MODULEBUILDER_TABLE_FORM_UPDATED_OK, Request::getString('table_name', '', 'POST')));
             }
         }
 
@@ -240,9 +241,10 @@ switch ($op) {
         $error = false;
         // Initialize tables handler
         $tablesHandler = $helper->getHandler('Tables');
-        if (isset($_POST['torder'])) {
+        if (Request::hasVar('torder')) {
             $i = 0;
-            foreach ($_POST['torder'] as $order) {
+            $torder = Request::getArray('torder');
+            foreach ($torder as $order) {
                 if ($order > 0) {
                     $tablesObj = $tablesHandler->get((int)$order);
                     if ($tablesObj instanceof \XoopsObject) {
@@ -265,7 +267,7 @@ switch ($op) {
         exit;
     case 'delete':
         $tablesObj = $helper->getHandler('Tables')->get($tableId);
-        if (isset($_REQUEST['ok']) && 1 == $_REQUEST['ok']) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('tables.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -295,7 +297,7 @@ switch ($op) {
             }
         } else {
             $customConfirm = new \XoopsModules\Modulebuilder\Common\Confirm(
-                ['ok' => 1, 'table_id' => $tableId, 'table_mid' => $tableMid, 'op' => 'delete'], \Xmf\Request::getString('REQUEST_URI', '', 'SERVER'), $tablesObj->getVar('table_name')
+                ['ok' => 1, 'table_id' => $tableId, 'table_mid' => $tableMid, 'op' => 'delete'], Request::getString('REQUEST_URI', '', 'SERVER'), $tablesObj->getVar('table_name')
             );
             $form         = $customConfirm->getFormConfirm();
             $GLOBALS['xoopsTpl']->assign('form', $form->render());
@@ -303,11 +305,11 @@ switch ($op) {
         break;
     case 'display':
         $modArray = ['admin', 'user', 'blocks', 'search', 'comments', 'notifications', 'permissions'];
-        $mid      = \Xmf\Request::getInt('mod_id', 0, 'POST');
+        $mid      = Request::getInt('mod_id', 0, 'POST');
         if ($mid > 0) {
             $modulesObj = $helper->getHandler('Modules')->get($mid);
             foreach ($modArray as $modField) {
-                if (isset($_POST['mod_' . $modField])) {
+                if (Request::hasVar('mod_' . $modField)) {
                     $mField = $modulesObj->getVar('mod_' . $modField);
                     $modulesObj->setVar('mod_' . $modField, !$mField);
                 }
@@ -318,11 +320,11 @@ switch ($op) {
             $GLOBALS['xoopsTpl']->assign('error', $modulesObj->getHtmlErrors());
         }
         $tableArray = ['admin', 'user', 'blocks', 'submenu', 'search', 'comments', 'notifications', 'permissions'];
-        $tid        = \Xmf\Request::getInt('table_id', 0, 'POST');
+        $tid        = Request::getInt('table_id', 0, 'POST');
         if ($tid > 0) {
             $tablesObj = $helper->getHandler('Tables')->get($tid);
             foreach ($tableArray as $tableField) {
-                if (isset($_POST['table_' . $tableField])) {
+                if (Request::hasVar('table_' . $tableField)) {
                     $tblField = $tablesObj->getVar('table_' . $tableField);
                     $tablesObj->setVar('table_' . $tableField, !$tblField);
                 }
