@@ -128,12 +128,12 @@ class BlocksFiles extends Files\CreateFile
         $contIf  = $this->xc->getXcEqualsOperator("\${$tableName}", "{$moduleDirname}_getMyItemIds('{$moduleDirname}_view', '{$moduleDirname}')", null, "\t");
         $crit    = $this->xc->getXcCriteria('', "'cid'", "'(' . \implode(',', \${$tableName}) . ')'", "'IN'", true);
         $contIf  .= $this->xc->getXcCriteriaAdd($critName, $crit, "\t");
-        $crit    = $this->xc->getXcCriteria('', "'{$fieldId}'", "{$moduleDirname}_block_addCatSelect(\$options)", "'IN'", true);
+        $crit    = $this->xc->getXcCriteria('', "'$fieldId'", "{$moduleDirname}_block_addCatSelect(\$options)", "'IN'", true);
         $contIf2 = $this->xc->getXcCriteriaAdd($critName, $crit, "\t\t");
         $contIf  .= $this->pc->getPhpCodeConditions('1 != (\count(\$options) && 0 == \$options[0])', '', '', $contIf2, false, "\t");
-        $crit    = $this->xc->getXcCriteria('', "'{$fieldId}'", '0', "'!='", true);
+        $crit    = $this->xc->getXcCriteria('', "'$fieldId'", '0', "'!='", true);
         $contIf2 = $this->xc->getXcCriteriaAdd($critName, $crit, "\t\t");
-        $contIf2 .= $this->xc->getXcCriteriaSetSort($critName, "'{$fieldId}'", "\t\t");
+        $contIf2 .= $this->xc->getXcCriteriaSetSort($critName, "'$fieldId'", "\t\t");
         $contIf2 .= $this->xc->getXcCriteriaSetOrder($critName, "'ASC'", "\t\t");
         $contIf  .= $this->pc->getPhpCodeConditions('$typeBlock', '', '', $contIf2, false, "\t");
 
@@ -171,7 +171,7 @@ class BlocksFiles extends Files\CreateFile
         $case4 = [];
         $case5 = [];
         $case1[] = $this->pc->getPhpCodeCommentLine("For the block: {$tableName} last",'',"\t\t\t");
-        $case1[] = $this->xc->getXcCriteriaSetSort($critName, "'{$fieldId}'","\t\t\t");
+        $case1[] = $this->xc->getXcCriteriaSetSort($critName, "'$fieldId'","\t\t\t");
         $case1[] = $this->xc->getXcCriteriaSetOrder($critName, "'DESC'","\t\t\t");
         $case2[] = $this->pc->getPhpCodeCommentLine("For the block: {$tableName} new",'',"\t\t\t");
         $case2[] = $this->pc->getPhpCodeCommentLine('New since last week: 7 * 24 * 60 * 60 = 604800', '', "\t\t\t");
@@ -276,8 +276,6 @@ class BlocksFiles extends Files\CreateFile
                     case Constants::FIELD_ELE_TEXTDATESELECT:
                     case Constants::FIELD_ELE_DATETIME:
                     case Constants::FIELD_ELE_SELECTUSER:
-                        $contentForeach .= $this->xc->getXcEqualsOperator(str_pad("\$block[\$i]['{$rpFieldName}_text']", $lenName), "\${$tableName}['{$rpFieldName}_text']", null, "\t\t\t");
-                        break;
                     case Constants::FIELD_ELE_SELECTSTATUS:
                     case Constants::FIELD_ELE_RADIOYN:
                     case Constants::FIELD_ELE_RADIO_ONOFFLINE:
@@ -343,9 +341,9 @@ class BlocksFiles extends Files\CreateFile
         $func .= $this->xc->getXcEqualsOperator('$helper', 'Helper::getInstance()', '',"\t");
         $func .= $this->xc->getXcHandlerLine($tableName, "\t");
         $func .= $this->xc->getXcCriteriaCompo($critName, "\t");
-        $crit = $this->xc->getXcCriteria('', "'{$fieldId}'", '0', "'!='", true);
+        $crit = $this->xc->getXcCriteria('', "'$fieldId'", '0', "'!='", true);
         $func .= $this->xc->getXcCriteriaAdd($critName, $crit, "\t");
-        $func .= $this->xc->getXcCriteriaSetSort($critName, "'{$fieldId}'","\t");
+        $func .= $this->xc->getXcCriteriaSetSort($critName, "'$fieldId'","\t");
         $func .= $this->xc->getXcCriteriaSetOrder($critName, "'ASC'","\t");
         $func .= $this->xc->getXcHandlerAllClear("{$tableName}All", $tableName, "\${$critName}", "\t");
         $func .= $this->pc->getPhpCodeUnset($critName, "\t");
@@ -399,8 +397,8 @@ class BlocksFiles extends Files\CreateFile
         $content .= $this->pc->getPhpCodeUseNamespace(['XoopsModules', $moduleDirname, 'Helper'], '', '');
         $content .= $this->pc->getPhpCodeUseNamespace(['XoopsModules', $moduleDirname, 'Constants']);
         $content .= $this->pc->getPhpCodeIncludeDir("\XOOPS_ROOT_PATH . '/modules/{$moduleDirname}/include/common.php'",'',true, true);
-        $content .= $this->getBlocksShow($moduleDirname, $tableName, $tableFieldname, $tablePermissions, $fields, $fieldId, $fieldParent);
-        $content .= $this->getBlocksEdit($moduleDirname, $tableName, $fieldId, $fieldMain, $language);
+        $content .= $this->getBlocksShow($moduleDirname, $tableName, $tableFieldname, $tablePermissions, $fields, $fieldId, (int)$fieldParent);
+        $content .= $this->getBlocksEdit($moduleDirname, $tableName, (string)$fieldId, (string)$fieldMain, $language);
 
         $this->create($moduleDirname, 'blocks', $filename, $content, \_AM_MODULEBUILDER_FILE_CREATED, \_AM_MODULEBUILDER_FILE_NOTCREATED);
 

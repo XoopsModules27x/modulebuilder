@@ -62,7 +62,6 @@ class RatingsHandler extends \XoopsPersistableObjectHandler
     /**
      * get inserted id
      *
-     * @param null
      * @return int reference to the {@link Get} object
      */
     public function getInsertId()
@@ -120,11 +119,11 @@ class RatingsHandler extends \XoopsPersistableObjectHandler
                 $ItemRating['avg_rate_value'] = \number_format($current_rating / $count, 2);
             }
             if (1 == $count) {
-                $text      = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MA_MODULEBUILDER_RATING_CURRENT_1);
-                $shorttext = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MA_MODULEBUILDER_RATING_CURRENT_SHORT_1);
+                $text      = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MD_MODULEBUILDER_RATING_CURRENT_1);
+                $shorttext = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MD_MODULEBUILDER_RATING_CURRENT_SHORT_1);
             } else {
-                $text      = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MA_MODULEBUILDER_RATING_CURRENT_X);
-                $shorttext = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MA_MODULEBUILDER_RATING_CURRENT_SHORT_X);
+                $text      = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MD_MODULEBUILDER_RATING_CURRENT_X);
+                $shorttext = \str_replace('%c', (string)$ItemRating['avg_rate_value'], \_MD_MODULEBUILDER_RATING_CURRENT_SHORT_X);
             }
             $text                    = \str_replace('%m', (string)$max_units, $text);
             $text                    = \str_replace('%t', (string)$ItemRating['nb_ratings'], $text);

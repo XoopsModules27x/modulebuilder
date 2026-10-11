@@ -150,9 +150,9 @@ class AdminIndex extends Files\CreateFile
         $ret    .= $this->xc->getXcXoopsTplAssign('navigation', "\$adminObject->displayNavigation('index.php')");
         $condIf = $this->xc->getXcXoopsLoadLanguage('admin/modulesadmin',"\t", 'system');
         $condIf .= $this->pc->getPhpCodeIncludeDir('\dirname(__DIR__)', 'testdata/index', true, false,'',"\t");
-        $condIf .= $this->axc->getAdminItemButton("\constant('CO_' . \$moduleDirNameUpper . '_ADD_SAMPLEDATA')", '', '', '../testdata/index.php?op=load', 'samplebutton', "\t");
-        $condIf .= $this->axc->getAdminItemButton("\constant('CO_' . \$moduleDirNameUpper . '_SAVE_SAMPLEDATA')", '', '', '../testdata/index.php?op=save', 'samplebutton', "\t");
-        $condIf .= '//' . $this->axc->getAdminItemButton("\constant('CO_' . \$moduleDirNameUpper . '_EXPORT_SCHEMA')", '', '', '../testdata/index.php?op=exportschema', 'samplebutton', "\t");
+        $condIf .= $this->axc->getAdminItemButton("\constant('_CO_' . \$moduleDirNameUpper . '_ADD_SAMPLEDATA')", '', '', '../testdata/index.php?op=load', 'samplebutton', "\t");
+        $condIf .= $this->axc->getAdminItemButton("\constant('_CO_' . \$moduleDirNameUpper . '_SAVE_SAMPLEDATA')", '', '', '../testdata/index.php?op=save', 'samplebutton', "\t");
+        $condIf .= '//' . $this->axc->getAdminItemButton("\constant('_CO_' . \$moduleDirNameUpper . '_EXPORT_SCHEMA')", '', '', '../testdata/index.php?op=exportschema', 'samplebutton', "\t");
         $condIf .= $this->axc->getAdminDisplayButton('left', "\t");
         $cond   = $this->xc->getXcGetConfig('displaySampleButton');
         $ret    .= $this->pc->getPhpCodeConditions($cond, '', '', $condIf);

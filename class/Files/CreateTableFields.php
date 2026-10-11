@@ -41,7 +41,7 @@ class CreateTableFields extends Files\CreateAbstractClass
     /**
      * @static function getInstance
      *
-     * @return bool|\ModuleBuilderTableFields
+     * @return bool
      */
     public static function getInstance()
     {

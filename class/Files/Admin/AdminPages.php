@@ -258,11 +258,13 @@ class AdminPages extends Files\CreateFile
      */
     private function getPermissionsSave($moduleDirname, string $perm = 'view')
     {
+        $ccGroupsPerm = $this->getCamelCase("groups_$perm", false, true);
         $ret     = $this->pc->getPhpCodeCommentLine('Permission to', $perm, "\t\t\t");
         $ret     .= $this->xc->getXcDeleteRight('grouppermHandler', "{$moduleDirname}_{$perm}", '$mid', '$permId', false, "\t\t\t");
         $content = $this->xc->getXcAddRight('grouppermHandler', "{$moduleDirname}_{$perm}", '$permId', '$onegroupId', '$mid', false, "\t\t\t\t\t");
-        $foreach = $this->pc->getPhpCodeForeach("_POST['groups_{$perm}']", false, false, 'onegroupId', $content, "\t\t\t\t");
-        $ret     .= $this->pc->getPhpCodeConditions("isset(\$_POST['groups_{$perm}'])", '', '', $foreach, false, "\t\t\t");
+        $foreach = $this->pc->getPhpCodeForeach($ccGroupsPerm, false, false, 'onegroupId', $content, "\t\t\t\t");
+        $ret     .= $this->xc->getXcXoopsRequest($ccGroupsPerm, 'groups_'. $perm, '', 'Array', "\t\t\t");
+        $ret     .= $this->pc->getPhpCodeConditions('!empty($' . $ccGroupsPerm . ')', '', '', $foreach, false, "\t\t\t");
 
         return $ret;
     }

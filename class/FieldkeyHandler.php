@@ -30,7 +30,7 @@ use XoopsModules\Modulebuilder;
 class FieldkeyHandler extends \XoopsPersistableObjectHandler
 {
     /**
-     * @param null|\XoopsDatabase|\XoopsMySQLDatabase $db
+     * @param \XoopsDatabase $db
      */
     public function __construct(\XoopsDatabase $db)
     {

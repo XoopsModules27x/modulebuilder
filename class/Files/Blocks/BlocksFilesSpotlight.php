@@ -144,13 +144,13 @@ class BlocksFilesSpotlight extends Files\CreateFile
             }
         }
 
-        $crit   = $this->xc->getXcCriteria('', "'{$fieldId}'", "'(' . \implode(',', \$options) . ')'", "'IN'", true);
+        $crit   = $this->xc->getXcCriteria('', "'$fieldId'", "'(' . \implode(',', \$options) . ')'", "'IN'", true);
         $contIf = $this->xc->getXcCriteriaAdd($critName, $crit, "\t\t");
         $contIf .= $this->xc->getXcEqualsOperator('$limit', '0', '',"\t\t");
         $func   .= $this->pc->getPhpCodeConditions('\count($options) > 0 && (int)$options[0] > 0', '', '', $contIf, false, "\t");
         $func   .= $this->pc->getPhpCodeBlankLine();
 
-        $func   .= $this->xc->getXcCriteriaSetSort($critName, "'{$fieldId}'","\t");
+        $func   .= $this->xc->getXcCriteriaSetSort($critName, "'$fieldId'","\t");
         $func   .= $this->xc->getXcCriteriaSetOrder($critName, "'DESC'","\t");
         $func   .= $this->xc->getXcCriteriaSetLimit($critName, '$limit', "\t");
         $func   .= $this->xc->getXcHandlerAllClear("{$tableName}All", $tableName, "\${$critName}", "\t");
@@ -214,8 +214,6 @@ class BlocksFilesSpotlight extends Files\CreateFile
                     case Constants::FIELD_ELE_TEXTDATESELECT:
                     case Constants::FIELD_ELE_DATETIME:
                     case Constants::FIELD_ELE_SELECTUSER:
-                        $contentForeach .= $this->xc->getXcEqualsOperator(str_pad("\$block[\$i]['{$rpFieldName}_text']", $lenName), "\${$tableName}['{$rpFieldName}_text']", null, "\t\t\t");
-                        break;
                     case Constants::FIELD_ELE_SELECTSTATUS:
                     case Constants::FIELD_ELE_RADIOYN:
                     case Constants::FIELD_ELE_RADIO_ONOFFLINE:
@@ -276,9 +274,9 @@ class BlocksFilesSpotlight extends Files\CreateFile
         $func .= $this->pc->getPhpCodeArrayShift('$options', "\t");
         $func .= $this->pc->getPhpCodeBlankLine();
         $func .= $this->xc->getXcCriteriaCompo($critName, "\t");
-        $crit = $this->xc->getXcCriteria('', "'{$fieldId}'", '0', "'!='", true);
+        $crit = $this->xc->getXcCriteria('', "'$fieldId'", '0', "'!='", true);
         $func .= $this->xc->getXcCriteriaAdd($critName, $crit, "\t");
-        $func .= $this->xc->getXcCriteriaSetSort($critName, "'{$fieldId}'","\t");
+        $func .= $this->xc->getXcCriteriaSetSort($critName, "'$fieldId'","\t");
         $func .= $this->xc->getXcCriteriaSetOrder($critName, "'ASC'","\t");
         $func .= $this->xc->getXcHandlerAllClear("{$tableName}All", $tableName, "\${$critName}", "\t");
         $func .= $this->pc->getPhpCodeUnset($critName, "\t");
@@ -331,7 +329,7 @@ class BlocksFilesSpotlight extends Files\CreateFile
         $content .= $this->pc->getPhpCodeUseNamespace(['XoopsModules', $moduleDirname, 'Constants']);
         $content .= $this->pc->getPhpCodeIncludeDir("\XOOPS_ROOT_PATH . '/modules/{$moduleDirname}/include/common.php'",'',true, true);
         $content .= $this->getBlocksShow($moduleDirname, $tableName, $tablePermissions, $fields, $fieldId);
-        $content .= $this->getBlocksEdit($moduleDirname, $tableName, $fieldId, $fieldMain, $language);
+        $content .= $this->getBlocksEdit($moduleDirname, $tableName, (string)$fieldId, (string)$fieldMain, $language);
 
         $this->create($moduleDirname, 'blocks', $filename, $content, \_AM_MODULEBUILDER_FILE_CREATED, \_AM_MODULEBUILDER_FILE_NOTCREATED);
 

@@ -387,7 +387,7 @@ class CreatePhpCode
      * @param string $t
      * @return string
      */
-    public function getPhpCodeForeach(string $array, $arrayKey = false, $key = false, $value = false, string $content = null, string $t = '')
+    public function getPhpCodeForeach(string $array, $arrayKey = false, $key = false, $value = false, ?string $content = null, string $t = '')
     {
         $vars  = '';
         $value = '' !== $value ? $value : 'i';
