@@ -154,11 +154,11 @@ function modulebuilder_check_db($module)
     $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
     if ($num_rows == 0) {
         $result = $xoopsDB->query(sprintf($sqlQueryFid, $fid));
+        if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
+            throw new \RuntimeException('Database query failed');
+        }
         $num_rows = $GLOBALS['xoopsDB']->getRowsNum($result);
         if ($num_rows > 0) {
-            if (!$xoopsDB->isResultSet($result) || !$result instanceof \mysqli_result) {
-                throw new \RuntimeException('Database query failed');
-            }
             [$fe_mid, $fe_tid, $fe_name, $fe_value] = $xoopsDB->fetchRow($result);
             //add existing element at end of table
             $sql = 'INSERT INTO `' . $xoopsDB->prefix('modulebuilder_fieldelements') . "` (`fieldelement_id`, `fieldelement_mid`, `fieldelement_tid`, `fieldelement_name`, `fieldelement_value`) VALUES (NULL, '{$fe_mid}', '{$fe_tid}', '{$fe_name}', '{$fe_value}')";

@@ -943,7 +943,7 @@ class CreateXoopsCode
                         $countUploader++;
                         break;
                     case 12:
-                        $ret .= $axc->getAxcSetVarUploadFile($moduleDirname, $tableName, $fieldName, true, (string)$countUploader, $fieldMain);
+                        $ret .= $axc->getAxcSetVarUploadFile($moduleDirname, $tableName, $fieldName, true,'', $countUploader, $fieldMain);
                         $countUploader++;
                         break;
                     case 13:

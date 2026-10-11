@@ -234,27 +234,17 @@ class AdminXoopsCode
 
         $ret          = $this->pc->getPhpCodeCommentLine('Set Var', $fieldName, $t);
         $condIf       = $this->pc->getPhpCodeIncludeDir('\XOOPS_ROOT_PATH', 'class/uploader', true, false, '', $t . "\t");
-        $condIf     .= $this->xc->getXcXoopsRequest('uploadFile' . $countUploader, 'xoops_upload_file', '', 'Array', "\t\t\t");
-        //$file         = $this->pc->getPhpCodeGlobalsVariables($fieldName, 'FILES') . "['name']";
-        //$ret          .= $this->xc->getXcEqualsOperator('$filename', $file, null, $t);
-
+        $condIf       .= $this->xc->getXcEqualsOperator('$uploadFile' . $countUploader, "Request::getArray('xoops_upload_file')[$countUploader]", null, $t . "\t");
         $ccFieldname = $this->cf->getCamelCase($fieldName, false, true);
-
         $ret          .= $this->xc->getXcEqualsOperator('$' . $ccFieldname, "Request::getArray('$fieldName', [], 'FILES')", null, $t);
         $ret          .= $this->xc->getXcEqualsOperator('$filename', '$' . $ccFieldname ."['name']", null, $t);
-
-
-        //$mimetype     = $this->pc->getPhpCodeGlobalsVariables($fieldName, 'FILES') . "['type']";
-        //$condIf       .= $this->xc->getXcEqualsOperator('$imgMimetype', $mimetype, null, $t . "\t");
         $condIf       .= $this->xc->getXcEqualsOperator('$imgMimetype', '$' . $ccFieldname ."['type']", null, $t . "\t");
-
-
         $condIf       .= $this->xc->getXcEqualsOperator('$imgNameDef ', "Request::getString('$fieldMain')", null, $t . "\t");
         $xUploadImage = "\\{$stuModuleDirname}_UPLOAD_IMAGE_PATH";
         $condIf       .= $this->xc->getXcMediaUploader('uploader', $xUploadImage . " . '/$tableName/'", 'mimetypes_image', 'maxsize_image', $t . "\t");
 
-        $notEmpty     = "!empty(\$uploadFile" . $countUploader . '[0])';
-        $fetchMedia   = $this->getAxcFetchMedia('uploader', "\$uploadFile" . $countUploader . '[0]');
+        $notEmpty     = "!empty(\$uploadFile" . $countUploader . ')';
+        $fetchMedia   = $this->getAxcFetchMedia('uploader', "\$uploadFile" . $countUploader);
 
         $ifelse       = $this->xc->getXcEqualsOperator('$extension', '\pathinfo($filename, \PATHINFO_EXTENSION)',null,  $t . "\t\t");
         $ifelse       .= $this->xc->getXcEqualsOperator('$imgName',  "\str_replace(' ', '', \$imgNameDef) . '.' . \$extension", null,$t . "\t\t");
